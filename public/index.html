@@ -1,1 +1,259 @@
- 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 Crypto Signals Pro - Señales de Trading en Tiempo Real</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .hero {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #10b981, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin: 60px auto;
+            max-width: 1000px;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.05);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #10b981;
+            margin-bottom: 10px;
+        }
+        .pricing {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin: 60px auto;
+            max-width: 1000px;
+        }
+        .price-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        .price-card:hover {
+            border-color: #3b82f6;
+            transform: translateY(-10px);
+        }
+        .price-card.featured {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+        }
+        .price {
+            font-size: 3em;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        .cta-button {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(90deg, #10b981, #3b82f6);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            margin-top: 20px;
+        }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 60px auto;
+            max-width: 1000px;
+        }
+        .feature-card {
+            background: rgba(255,255,255,0.03);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        .feature-card i {
+            font-size: 3em;
+            color: #3b82f6;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-chart-line"></i>
+                <span>CryptoSignals<span style="color:#10b981;">Pro</span></span>
+            </div>
+            <div class="nav-links">
+                <a href="#features">Características</a>
+                <a href="#pricing">Precios</a>
+                <a href="#stats">Estadísticas</a>
+                <a href="login.html" class="nav-button">Iniciar Sesión</a>
+                <a href="register.html" class="nav-button primary">Registro Gratis</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>🚀 Señales de Trading Profesionales</h1>
+            <p class="subtitle">Obtén señales de trading en tiempo real con 85% de precisión</p>
+            <p>Únete a miles de traders que ya están generando ganancias con nuestro sistema</p>
+            <a href="register.html" class="cta-button">
+                <i class="fas fa-rocket"></i> Comenzar Gratis
+            </a>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <section id="stats" class="container">
+        <h2 class="section-title">📊 Nuestros Resultados</h2>
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number">85%</div>
+                <div>Precisión en Señales</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">12,500+</div>
+                <div>Usuarios Activos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">$2.3M+</div>
+                <div>Ganancias Generadas</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">24/7</div>
+                <div>Soporte en Tiempo Real</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="container">
+        <h2 class="section-title">✨ Características Premium</h2>
+        <div class="features">
+            <div class="feature-card">
+                <i class="fas fa-bolt"></i>
+                <h3>Señales en Tiempo Real</h3>
+                <p>Recibe alertas instantáneas vía Telegram, Email y SMS</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-chart-bar"></i>
+                <h3>Análisis Avanzado</h3>
+                <p>IA que analiza 50+ indicadores técnicos simultáneamente</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-shield-alt"></i>
+                <h3>Gestor de Riesgos</h3>
+                <p>Stop-loss y take-profit automáticos para proteger tu capital</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-mobile-alt"></i>
+                <h3>App Móvil</h3>
+                <p>Accede desde cualquier dispositivo, iOS y Android</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="container">
+        <h2 class="section-title">💎 Planes de Suscripción</h2>
+        <div class="pricing">
+            <div class="price-card">
+                <h3>🎯 Básico</h3>
+                <div class="price">Gratis</div>
+                <ul>
+                    <li><i class="fas fa-check"></i> 3 señales diarias</li>
+                    <li><i class="fas fa-check"></i> Acceso web</li>
+                    <li><i class="fas fa-check"></i> Señales con retraso</li>
+                    <li><i class="fas fa-times"></i> Telegram Premium</li>
+                    <li><i class="fas fa-times"></i> Análisis avanzado</li>
+                </ul>
+                <a href="register.html" class="cta-button">Comenzar Gratis</a>
+            </div>
+            
+            <div class="price-card featured">
+                <div style="background:#10b981;color:white;padding:10px;border-radius:10px;margin-bottom:20px;">
+                    ⭐ MÁS POPULAR
+                </div>
+                <h3>🚀 Pro Trader</h3>
+                <div class="price">$49<span style="font-size:0.5em;">/mes</span></div>
+                <ul>
+                    <li><i class="fas fa-check"></i> Señales ilimitadas</li>
+                    <li><i class="fas fa-check"></i> Telegram Premium</li>
+                    <li><i class="fas fa-check"></i> Alertas en tiempo real</li>
+                    <li><i class="fas fa-check"></i> App móvil incluida</li>
+                    <li><i class="fas fa-check"></i> Soporte prioritario</li>
+                </ul>
+                <a href="register.html?plan=pro" class="cta-button">Suscribirse Ahora</a>
+            </div>
+            
+            <div class="price-card">
+                <h3>🏆 VIP</h3>
+                <div class="price">$99<span style="font-size:0.5em;">/mes</span></div>
+                <ul>
+                    <li><i class="fas fa-check"></i> Todo en Pro +</li>
+                    <li><i class="fas fa-check"></i> Señales exclusivas</li>
+                    <li><i class="fas fa-check"></i> Mentoría personal</li>
+                    <li><i class="fas fa-check"></i> Webinars privados</li>
+                    <li><i class="fas fa-check"></i> ROI garantizado*</li>
+                </ul>
+                <a href="register.html?plan=vip" class="cta-button">Solicitar Acceso</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="logo">
+                <i class="fas fa-chart-line"></i>
+                <span>CryptoSignals<span style="color:#10b981;">Pro</span></span>
+            </div>
+            <div class="footer-links">
+                <a href="#">Términos</a>
+                <a href="#">Privacidad</a>
+                <a href="#">Contacto</a>
+                <a href="#">Soporte</a>
+            </div>
+            <div class="social">
+                <a href="#"><i class="fab fa-telegram"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-discord"></i></a>
+            </div>
+        </div>
+        <p style="text-align:center;color:#64748b;margin-top:30px;">
+            © 2024 CryptoSignalsPro. Todos los derechos reservados.<br>
+            *Rendimientos pasados no garantizan resultados futuros.
+        </p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html> 

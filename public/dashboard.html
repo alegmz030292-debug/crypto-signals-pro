@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Crypto Signals</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --vip: #f59e0b;
+            --pro: #10b981;
+            --free: #64748b;
+            --dark: #0f172a;
+            --light: #1e293b;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--dark); color: white; }
+        
+        .navbar {
+            background: rgba(15, 23, 42, 0.95);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .logo { font-size: 1.5em; font-weight: bold; }
+        .logo span { color: var(--primary); }
+        
+        .user-menu { display: flex; align-items: center; gap: 20px; }
+        .plan-badge {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        .badge-free { background: var(--free); }
+        .badge-pro { background: var(--pro); }
+        .badge-vip { background: var(--vip); }
+        
+        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 30px;
+        }
+        
+        .sidebar {
+            background: var(--light);
+            border-radius: 15px;
+            padding: 20px;
+        }
+        
+        .sidebar-menu li {
+            list-style: none;
+            padding: 15px;
+            margin: 5px 0;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        .sidebar-menu li:hover { background: rgba(255,255,255,0.1); }
+        .sidebar-menu li.active { background: var(--primary); }
+        
+        .main-content { display: grid; gap: 30px; }
+        
+        .plan-card {
+            background: var(--light);
+            border-radius: 15px;
+            padding: 30px;
+            border: 2px solid transparent;
+        }
+        .plan-card.active { border-color: var(--primary); }
+        
+        .plan-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .price { font-size: 2.5em; font-weight: bold; }
+        .price-free { color: var(--free); }
+        .price-pro { color: var(--pro); }
+        .price-vip { color: var(--vip); }
+        
+        .features { margin: 20px 0; }
+        .features li { margin: 10px 0; display: flex; align-items: center; gap: 10px; }
+        
+        .upgrade-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        
+        .payment-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: var(--light);
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+        }
+        
+        .wallet-info {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--pro);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .wallet-address {
+            font-family: monospace;
+            font-size: 1.2em;
+            background: rgba(0,0,0,0.3);
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            word-break: break-all;
+        }
+        
+        .copy-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        .alert-success { background: rgba(16, 185, 129, 0.2); border: 1px solid var(--pro); }
+        .alert-error { background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-chart-line"></i> Crypto<span>Signals</span>
+        </div>
+        <div class="user-menu">
+            <span class="plan-badge badge-free" id="userPlanBadge">FREE</span>
+            <span id="username">Usuario</span>
+            <button onclick="logout()" style="background:none;border:none;color:white;cursor:pointer;">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+    </nav>
+    
+    <!-- Dashboard -->
+    <div class="container">
+        <div class="dashboard-grid">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <ul class="sidebar-menu">
+                    <li class="active" onclick="showSection('signals')">
+                        <i class="fas fa-bolt"></i> Señales
+                    </li>
+                    <li onclick="showSection('plans')">
+                        <i class="fas fa-crown"></i> Planes
+                    </li>
+                    <li onclick="showSection('payments')">
+                        <i class="fas fa-credit-card"></i> Pagos
+                    </li>
+                    <li onclick="showSection('profile')">
+                        <i class="fas fa-user"></i> Perfil
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="main-content">
+                <!-- Sección: Plan Actual -->
+                <div id="currentPlanSection">
+                    <h2>Tu Plan Actual</h2>
+                    <div class="plan-card active">
+                        <div class="plan-header">
+                            <h3 id="currentPlanTitle">FREE</h3>
+                            <div class="price price-free" id="currentPlanPrice">$0/mes</div>
+                        </div>
+                        <p id="planDescription">Acceso básico a señales</p>
+                        <div class="features">
+                            <div id="planFeatures">
+                                <li><i class="fas fa-check"></i> 3 señales diarias</li>
+                                <li><i class="fas fa-check"></i> Acceso web</li>
+                                <li><i class="fas fa-times"></i> Sin Telegram</li>
+                                <li><i class="fas fa-times"></i> Sin soporte prioritario</li>
+                            </div>
+                        </div>
+                        <button class="upgrade-btn" onclick="showUpgradeModal()">
+                            <i class="fas fa-rocket"></i> ¡MEJORAR PLAN!
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Sección: Señales -->
+                <div id="signalsSection">
+                    <h2>📈 Señales Recientes</h2>
+                    <div id="signalsList">
+                        <div style="text-align:center;padding:40px;color:#64748b;">
+                            <i class="fas fa-bolt" style="font-size:3em;"></i>
+                            <p>Cargando señales...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal de Pago -->
+    <div class="payment-modal" id="paymentModal">
+        <div class="modal-content">
+            <h2><i class="fas fa-crown"></i> Mejorar a <span id="upgradePlanTitle">PRO</span></h2>
+            <p>Precio: <span id="upgradePlanPrice" style="font-size:1.5em;font-weight:bold;">$49</span> USDT</p>
+            
+            <div class="wallet-info">
+                <h4><i class="fas fa-wallet"></i> Envía el pago a:</h4>
+                <div class="wallet-address" id="paymentWallet">
+                    TKn8tCZKN2aSv48MGkwaLAVPodDZMtPeRV
+                </div>
+                <p><strong>Cantidad exacta:</strong> <span id="paymentAmount">49</span> USDT</p>
+                <p><strong>Red:</strong> TRC20 (Tron)</p>
+                
+                <button class="copy-btn" onclick="copyWalletAddress()">
+                    <i class="fas fa-copy"></i> Copiar Dirección
+                </button>
+            </div>
+            
+            <div style="margin:20px 0;">
+                <h4><i class="fas fa-info-circle"></i> Instrucciones:</h4>
+                <ol style="margin:15px 0;padding-left:20px;">
+                    <li>Usa Trust Wallet, Binance o exchange</li>
+                    <li>Selecciona USDT y red TRC20</li>
+                    <li>Envía EXACTAMENTE el monto indicado</li>
+                    <li>Guarda el TX Hash (Hash de transacción)</li>
+                    <li>Ingresa el TX Hash abajo</li>
+                </ol>
+            </div>
+            
+            <div style="margin:20px 0;">
+                <label>TX Hash de tu transacción:</label>
+                <input type="text" id="txHashInput" placeholder="Ej: 0x1234abcd..." 
+                       style="width:100%;padding:10px;margin:10px 0;border-radius:5px;background:rgba(255,255,255,0.1);color:white;border:1px solid rgba(255,255,255,0.2);">
+                <button class="upgrade-btn" onclick="verifyPayment()">
+                    <i class="fas fa-check-circle"></i> Verificar Pago
+                </button>
+            </div>
+            
+            <div id="paymentStatus"></div>
+            
+            <button onclick="closePaymentModal()" style="width:100%;padding:10px;background:none;color:#94a3b8;border:1px solid #64748b;border-radius:5px;cursor:pointer;">
+                Cancelar
+            </button>
+        </div>
+    </div>
+    
+    <script>
+        // Variables globales
+        let currentUser = null;
+        let selectedPlan = 'pro';
+        
+        // Cargar usuario al iniciar
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserData();
+            loadSignals();
+        });
+        
+        // Cargar datos del usuario
+        async function loadUserData() {
+            try {
+                // Simular usuario (en producción vendría de login)
+                currentUser = {
+                    id: 'user_' + Math.random().toString(36).substr(2, 9),
+                    username: 'Trader_' + Math.floor(Math.random() * 1000),
+                    email: 'trader@email.com',
+                    plan: 'free',
+                    credits: 3
+                };
+                
+                // Guardar en localStorage
+                localStorage.setItem('crypto_user', JSON.stringify(currentUser));
+                
+                // Actualizar UI
+                updateUserUI();
+                
+                // Verificar plan actual
+                await checkUserPlan();
+                
+            } catch (error) {
+                console.error('Error cargando usuario:', error);
+            }
+        }
+        
+        // Actualizar UI con datos del usuario
+        function updateUserUI() {
+            if (!currentUser) return;
+            
+            document.getElementById('username').textContent = currentUser.username;
+            document.getElementById('userPlanBadge').textContent = currentUser.plan.toUpperCase();
+            document.getElementById('userPlanBadge').className = `plan-badge badge-${currentUser.plan}`;
+            
+            // Actualizar sección de plan
+            document.getElementById('currentPlanTitle').textContent = currentUser.plan.toUpperCase();
+            document.getElementById('currentPlanPrice').textContent = 
+                currentUser.plan === 'free' ? '$0/mes' : 
+                currentUser.plan === 'pro' ? '$49/mes' : '$99/mes';
+            document.getElementById('currentPlanPrice').className = `price price-${currentUser.plan}`;
+            
+            // Actualizar descripción
+            const descriptions = {
+                free: 'Plan básico con acceso limitado',
+                pro: 'Plan profesional con señales ilimitadas',
+                vip: 'Plan VIP con beneficios exclusivos'
+            };
+            document.getElementById('planDescription').textContent = descriptions[currentUser.plan];
+            
+            // Actualizar características
+            const features = {
+                free: `
+                    <li><i class="fas fa-check"></i> 3 señales diarias</li>
+                    <li><i class="fas fa-check"></i> Acceso web básico</li>
+                    <li><i class="fas fa-times"></i> Sin Telegram</li>
+                    <li><i class="fas fa-times"></i> Sin soporte prioritario</li>
+                `,
+                pro: `
+                    <li><i class="fas fa-check"></i> Señales ilimitadas</li>
+                    <li><i class="fas fa-check"></i> Telegram Premium</li>
+                    <li><i class="fas fa-check"></i> Alertas en tiempo real</li>
+                    <li><i class="fas fa-check"></i> Soporte prioritario</li>
+                `,
+                vip: `
+                    <li><i class="fas fa-check"></i> Todo en PRO +</li>
+                    <li><i class="fas fa-check"></i> Señales exclusivas</li>
+                    <li><i class="fas fa-check"></i> Mentoría personal</li>
+                    <li><i class="fas fa-check"></i> Webinars VIP</li>
+                `
+            };
+            document.getElementById('planFeatures').innerHTML = features[currentUser.plan];
+        }
+        
+        // Verificar plan del usuario
+        async function checkUserPlan() {
+            try {
+                // En producción, esto llamaría a tu API
+                // const response = await fetch('/.netlify/functions/payments', {
+                //     method: 'POST',
+                //     headers: {'Content-Type': 'application/json'},
+                //     body: JSON.stringify({
+                //         action: 'get_user_plan',
+                //         userId: currentUser.id
+                //     })
+                // });
+                // const data = await response.json();
+                
+                // Simular respuesta
+                const data = {
+                    success: true,
+                    plan: currentUser.plan,
+                    expiresAt: null
+                };
+                
+                if (data.success && data.plan !== currentUser.plan) {
+                    currentUser.plan = data.plan;
+                    localStorage.setItem('crypto_user', JSON.stringify(currentUser));
+                    updateUserUI();
+                }
+                
+            } catch (error) {
+                console.error('Error verificando plan:', error);
+            }
+        }
+        
+        // Mostrar modal de pago
+        function showUpgradeModal() {
+            if (currentUser.plan === 'vip') {
+                alert('¡Ya tienes el plan máximo!');
+                return;
+            }
+            
+            selectedPlan = currentUser.plan === 'free' ? 'pro' : 'vip';
+            const prices = { pro: 49, vip: 99 };
+            
+            document.getElementById('upgradePlanTitle').textContent = selectedPlan.toUpperCase();
+            document.getElementById('upgradePlanPrice').textContent = `$${prices[selectedPlan]}`;
+            document.getElementById('paymentAmount').textContent = prices[selectedPlan];
+            
+            document.getElementById('paymentModal').style.display = 'flex';
+        }
+        
+        // Cerrar modal
+        function closePaymentModal() {
+            document.getElementById('paymentModal').style.display = 'none';
+            document.getElementById('txHashInput').value = '';
+            document.getElementById('paymentStatus').innerHTML = '';
+        }
+        
+        // Copiar dirección de wallet
+        function copyWalletAddress() {
+            const wallet = document.getElementById('paymentWallet').textContent;
+            navigator.clipboard.writeText(wallet)
+                .then(() => alert('¡Dirección copiada al portapapeles!'))
+                .catch(err => console.error('Error copiando:', err));
+        }
+        
+        // Verificar pago
+        async function verifyPayment() {
+            const txHash = document.getElementById('txHashInput').value.trim();
+            
+            if (!txHash) {
+                showPaymentAlert('Por favor ingresa el TX Hash', 'error');
+                return;
+            }
+            
+            showPaymentAlert('Verificando pago...', 'info');
+            
+            try {
+                // En producción, esto llamaría a tu API
+                // const response = await fetch('/.netlify/functions/payments', {
+                //     method: 'POST',
+                //     headers: {'Content-Type': 'application/json'},
+                //     body: JSON.stringify({
+                //         action: 'check_payment',
+                //         userId: currentUser.id,
+                //         plan: selectedPlan,
+                //         txHash: txHash
+                //     })
+                // });
+                // const data = await response.json();
+                
+                // Simular verificación exitosa después de 2 segundos
+                setTimeout(() => {
+                    const data = {
+                        success: true,
+                        verified: true,
+                        plan: selectedPlan
+                    };
+                    
+                    if (data.success && data.verified) {
+                        showPaymentAlert('¡Pago verificado exitosamente! Actualizando tu plan...', 'success');
+                        
+                        // Actualizar usuario localmente
+                        currentUser.plan = data.plan;
+                        localStorage.setItem('crypto_user', JSON.stringify(currentUser));
+                        updateUserUI();
+                        
+                        // Cerrar modal después de 2 segundos
+                        setTimeout(() => {
+                            closePaymentModal();
+                            alert(`¡Felicidades! Ahora eres usuario ${data.plan.toUpperCase()}`);
+                        }, 2000);
+                        
+                    } else {
+                        showPaymentAlert('Pago no encontrado. Verifica el TX Hash y espera 10 minutos.', 'error');
+                    }
+                }, 2000);
+                
+            } catch (error) {
+                showPaymentAlert('Error verificando pago: ' + error.message, 'error');
+            }
+        }
+        
+        // Mostrar alertas de pago
+        function showPaymentAlert(message, type) {
+            const statusDiv = document.getElementById('paymentStatus');
+            const color = type === 'success' ? '#10b981' : 
+                         type === 'error' ? '#ef4444' : '#3b82f6';
+            
+            statusDiv.innerHTML = `
+                <div class="alert" style="border-color: ${color};">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                    ${message}
+                </div>
+            `;
+        }
+        
+        // Cargar señales
+        async function loadSignals() {
+            // Señales de ejemplo
+            const signals = [
+                { symbol: 'BTCUSDT', type: 'BUY', price: 45231, target: 46800, confidence: 85 },
+                { symbol: 'ETHUSDT', type: 'SELL', price: 2532, target: 2450, confidence: 72 },
+                { symbol: 'SOLUSDT', type: 'BUY', price: 102.3, target: 110, confidence: 78 }
+            ];
+            
+            let html = '<div style="display:grid;gap:15px;">';
+            
+            signals.forEach(signal => {
+                const canView = currentUser.plan !== 'free' || currentUser.credits > 0;
+                
+                html += `
+                <div style="background:rgba(255,255,255,0.05);padding:20px;border-radius:10px;border-left:4px solid ${signal.type === 'BUY' ? '#10b981' : '#ef4444'}">
+                    <div style="display:flex;justify-content:space-between;align-items:center;">
+                        <div>
+                            <strong style="font-size:1.2em;">${signal.symbol}</strong>
+                            <span style="color:${signal.type === 'BUY' ? '#10b981' : '#ef4444'};margin-left:10px;">
+                                ${signal.type}
+                            </span>
+                        </div>
+                        <div style="text-align:right;">
+                            <div style="font-size:1.5em;font-weight:bold;">$${signal.price.toLocaleString()}</div>
+                            <small>Target: $${signal.target.toLocaleString()}</small>
+                        </div>
+                    </div>
+                    <div style="margin-top:10px;">
+                        <div style="display:flex;justify-content:space-between;">
+                            <small>Confianza: ${signal.confidence}%</small>
+                            ${currentUser.plan === 'free' ? 
+                              `<small>Usa 1 de tus ${currentUser.credits} créditos</small>` : 
+                              `<small>VIP: Análisis completo disponible</small>`}
+                        </div>
+                        ${canView ? 
+                          `<button style="margin-top:10px;padding:8px 15px;background:#3b82f6;color:white;border:none;border-radius:5px;cursor:pointer;">
+                            <i class="fas fa-eye"></i> Ver Análisis Completo
+                          </button>` :
+                          `<div style="margin-top:10px;padding:10px;background:rgba(239,68,68,0.2);border-radius:5px;text-align:center;">
+                            <i class="fas fa-lock"></i> Actualiza a PRO para ver esta señal
+                          </div>`}
+                    </div>
+                </div>`;
+            });
+            
+            html += '</div>';
+            document.getElementById('signalsList').innerHTML = html;
+        }
+        
+        // Mostrar sección
+        function showSection(section) {
+            // Actualizar menú activo
+            document.querySelectorAll('.sidebar-menu li').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            
+            // Mostrar sección correspondiente
+            // (Implementar lógica para mostrar diferentes secciones)
+        }
+        
+        // Logout
+        function logout() {
+            localStorage.removeItem('crypto_user');
+            window.location.href = 'index.html';
+        }
+        
+        // Configurar el botón de copiar
+        document.getElementById('paymentWallet').addEventListener('click', copyWalletAddress);
+    </script>
+</body>
+</html>

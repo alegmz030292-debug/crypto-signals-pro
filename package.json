@@ -1,22 +1,7 @@
-(
-echo {
-echo   "name": "crypto-signals-pro",
-echo   "version": "1.0.0",
-echo   "description": "Crypto Signals Platform",
-echo   "main": "index.js",
-echo   "scripts": {
-echo     "build": "echo 'Build completed' && exit 0",
-echo     "dev": "netlify dev"
-echo   },
-echo   "dependencies": {
-echo     "axios": "^1.6.0",
-echo     "crypto": "^1.0.1"
-echo   },
-echo   "devDependencies": {
-echo     "@netlify/functions": "^2.0.0"
-echo   },
-echo   "keywords": ["crypto", "trading", "signals"],
-echo   "author": "Alejandro Gomez",
-echo   "license": "MIT"
-echo }
-) > package.json
+{  
+  "name": "crypto-signals-pro",  
+  "version": "1.0.0",  
+  "scripts": {  
+    "build": "echo Build successful"  
+  }  
+} 

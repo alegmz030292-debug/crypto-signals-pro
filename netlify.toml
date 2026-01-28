@@ -1,17 +1,8 @@
-(
-echo [build]
-echo   publish = "public"
-echo   functions = "netlify/functions"
-echo   command = "npm install"
-echo.
-echo [build.environment]
-echo   NODE_VERSION = "18"
-echo.
-echo [[redirects]]
-echo   from = "/*"
-echo   to = "/index.html"
-echo   status = 200
-echo.
-echo [functions]
-echo   node_bundler = "esbuild"
-) > netlify.toml
+[build] 
+publish = "public" 
+functions = "netlify/functions" 
+ 
+[[redirects]] 
+from = "/*" 
+to = "/index.html" 
+status = 200 
